@@ -15,9 +15,36 @@ String.prototype.shuffle = function() {
             var tmp = a[i];
             a[i] = a[j];
             a[j] = tmp;
-         }
+        }
         return a.join("");
     }).join(" ");
+}
+
+//Random words
+String.prototype.randomWord = function() {
+    var vowels = ['a', 'e', 'i', 'o', 'u'];
+    var consts = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'qu', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z', 'tt', 'ch', 'sh'];
+
+    var len = 4;
+
+    var word = '';
+    var word2 = '';
+    var word3 = '';
+
+
+    var is_vowel = false;
+
+    var arr;
+
+    for (var i = 0; i < len; i++) {
+
+        if (is_vowel) arr = vowels
+        else arr = consts
+        is_vowel = !is_vowel;
+
+        word += arr[Math.round(Math.random() * (arr.length - 1))];
+    }
+    return word;
 }
 
 restService.use(bodyParser.urlencoded({
@@ -30,8 +57,8 @@ restService.post('/echo', function(req, res) {
     var speech = req.body.result && req.body.result.parameters && req.body.result.parameters.echoText ? req.body.result.parameters.echoText : "Seems like some problem. Speak again."
     speech
     return res.json({
-        speech: speech.shuffle(),
-        displayText: speech.shuffle(),
+        speech: speech.randomWord(),
+        displayText: speech.randomWord(),
         source: 'webhook-echo-sample'
     });
 });
