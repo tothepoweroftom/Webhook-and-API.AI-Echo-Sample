@@ -5,6 +5,21 @@ const bodyParser = require('body-parser');
 
 const restService = express();
 
+String.prototype.shuffle = function() {
+    return this.split(" ").map(function(word, i) {
+        var a = word.split(""),
+            n = a.length;
+
+        for (var i = n - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = a[i];
+            a[i] = a[j];
+            a[j] = tmp;
+         }
+        return a.join("");
+    }).join(" ");
+}
+
 restService.use(bodyParser.urlencoded({
     extended: true
 }));
@@ -13,9 +28,10 @@ restService.use(bodyParser.json());
 
 restService.post('/echo', function(req, res) {
     var speech = req.body.result && req.body.result.parameters && req.body.result.parameters.echoText ? req.body.result.parameters.echoText : "Seems like some problem. Speak again."
+    speech
     return res.json({
-        speech: speech,
-        displayText: speech,
+        speech: speech.shuffle(),
+        displayText: speech.shuffle(),
         source: 'webhook-echo-sample'
     });
 });
